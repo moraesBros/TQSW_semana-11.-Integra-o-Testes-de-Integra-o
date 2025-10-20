@@ -7,20 +7,20 @@ class AlunoClass:
         self.nome = nome
         self.sobrenome = sobrenome
         self.nota = nota
-        self.aluno_id = aluno_id  # Opcional: ID único para o aluno        
+        self.aluno_id = aluno_id  # ID único para o aluno        
 
     def mostrarAluno(self):
         return f'Aluno: {self.nome} {self.sobrenome} - Nota: {self.nota}'
 
     def salvar(self, conexao, colecao):
-        # Cria um dicionário com os dados do aluno
+        # Cria dados do aluno
         dados_aluno = {
             'nome': self.nome,
             'sobrenome': self.sobrenome,
             'nota': self.nota
         }
 
-        # Se um ID único for fornecido, incluir no dicionário
+        
         if self.aluno_id is not None:
             dados_aluno['aluno_id'] = self.aluno_id
 
@@ -28,10 +28,10 @@ class AlunoClass:
         resultado = conexao[colecao].insert_one(dados_aluno)
         print(f'Aluno salvo com o ID: {resultado.inserted_id}')
 
-# Classe para testes da AlunoClass
+# Classe para testes
 class AlunoTest(unittest.TestCase):
     def test_salvarAluno(self):
-        # Configurar o aluno a ser testado
+        
         aluno = AlunoClass(nome='João', sobrenome='Silva', nota=9.5)
 
         # Stub para a conexão MongoDB
@@ -42,16 +42,16 @@ class AlunoTest(unittest.TestCase):
         # Chamando o método salvar
         aluno.salvar(conexao=conexao_stub, colecao='alunos')
 
-        # Verifica se insert_one foi chamado com os dados corretos
+        # Verifica o chamado com os dados corretos
         colecao_stub.insert_one.assert_called_once_with({
             'nome': 'João',
             'sobrenome': 'Silva',
             'nota': 9.5
         })
 
-        # Testa se a saída do teste foi bem-sucedida ao simular a inserção
+        # Testa se simula a inserção
         print(f'ID do aluno salvo: {colecao_stub.insert_one.return_value.inserted_id}')
 
-# Executar os testes
+
 if __name__ == '__main__':
     unittest.main()
